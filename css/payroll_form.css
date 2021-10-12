@@ -107,9 +107,6 @@ label {
     resize: vertical;
 }
 
-.input[type = "range"]{
-    padding: 0%;
-}
 .profile-radio-content {
     display: flex;
     flex-direction: row;
@@ -232,8 +229,6 @@ select {
     }
     .form {
         padding: 35px 55px;
-        width: 70%;
-
     }
     select {
         margin-right: 5px;
@@ -244,7 +239,6 @@ select {
     .form {
         margin-top: 10px;
         padding: 10px 30px;
-        width: 80%;
     }
     .row {
         flex-direction: column;
