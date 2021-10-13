@@ -1,4 +1,37 @@
 window.addEventListener('DOMContentLoaded', (event) =>{
+    const name = document.querySelector('#name');
+    const nameTextError = document.querySelector('.name-text-error');
+    name.addEventListener('input', function () {
+        if (name.value.length == 0) {
+            setErrorText(".name-text-error","");
+            return;
+        }
+        try {
+            (new EmployeePayRollData()).name = name.value;
+            setErrorText(".name-text-error","");
+        } catch (e) {
+            setErrorText(".name-text-error",e);
+        }
+    });
+    const startDate = document.querySelector('.start-date');
+    startDate.addEventListener('input', function () {
+        let year = getInputValueById('#year');
+        let month = getInputValueById('#month');
+        let day = getInputValueById('#day');
+        if (day == "" || month == "" || year == "") {
+            setErrorText(".date-text-error","");
+            return;
+        }
+
+        try {
+            (new EmployeePayRollData()).startDate = new Date(year,parseInt(month)-1,day);
+            setErrorText(".date-text-error","");
+        } catch (e) {
+            setErrorText(".date-text-error",e);
+                }
+    });
+    
+
     const salary = document.querySelector('#salary');
     const output = document.querySelector('.salary-output');
     output.textContent = salary.value;
@@ -7,6 +40,12 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     });
     
     });
+    const setErrorText = (errorName, errorMessage) => {
+        const textError = document.querySelector(errorName);
+        textError.textContent = errorMessage;
+        return;
+    }
+    
     const save = () => {
         let employeePayrollData;
         try {
@@ -18,7 +57,12 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     
     const createEmployeePayroll = () => {
         let employeePayrollData = new EmployeePayRollData();
-        employeePayrollData.name = getInputValueById('#name');
+        try {
+            employeePayrollData.name = getInputValueById('#name');
+        } catch (e) {
+            setErrorText(".name-text-error", " Please Enter a valid name");
+        throw e;
+    }
         employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
         employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
         employeePayrollData.department = getSelectedValues('[name=department]');
@@ -27,7 +71,12 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         let year = getInputValueById('#year');
         let month = parseInt(getInputValueById('#month')) - 1;
         let day = getInputValueById('#day');
-        employeePayrollData.startDate = new Date(year, month, day);
+        try {
+            employeePayrollData.startDate = new Date(year, month, day);
+        } catch (e) {
+            setErrorText(".date-text-error", "Please give a  correct date");
+        throw e;
+        }
         console.log(employeePayrollData.toString());
     
         alert(employeePayrollData.toString());
