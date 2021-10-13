@@ -60,8 +60,9 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         try {
             employeePayrollData.name = getInputValueById('#name');
         } catch (e) {
-            setErrorText(".name-text-error", e);
-        }
+            setErrorText(".name-text-error", " Please Enter a valid name");
+        throw e;
+    }
         employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
         employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
         employeePayrollData.department = getSelectedValues('[name=department]');
@@ -73,7 +74,8 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         try {
             employeePayrollData.startDate = new Date(year, month, day);
         } catch (e) {
-            setErrorText(".date-text-error", e);
+            setErrorText(".date-text-error", "Please give a  correct date");
+        throw e;
         }
         console.log(employeePayrollData.toString());
     
