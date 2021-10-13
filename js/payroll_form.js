@@ -57,7 +57,11 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     
     const createEmployeePayroll = () => {
         let employeePayrollData = new EmployeePayRollData();
-        employeePayrollData.name = getInputValueById('#name');
+        try {
+            employeePayrollData.name = getInputValueById('#name');
+        } catch (e) {
+            setErrorText(".name-text-error", e);
+        }
         employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
         employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
         employeePayrollData.department = getSelectedValues('[name=department]');
@@ -66,7 +70,11 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         let year = getInputValueById('#year');
         let month = parseInt(getInputValueById('#month')) - 1;
         let day = getInputValueById('#day');
-        employeePayrollData.startDate = new Date(year, month, day);
+        try {
+            employeePayrollData.startDate = new Date(year, month, day);
+        } catch (e) {
+            setErrorText(".date-text-error", e);
+        }
         console.log(employeePayrollData.toString());
     
         alert(employeePayrollData.toString());
