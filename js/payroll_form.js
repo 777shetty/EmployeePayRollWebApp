@@ -22,7 +22,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
             setErrorText(".date-text-error", "");
             return;
         }
-
         try {
             (new EmployeePayRollData()).startDate = new Date(year, parseInt(month) - 1, day);
             setErrorText(".date-text-error", "");
@@ -30,22 +29,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
             setErrorText(".date-text-error", e);
         }
     });
-
     const salary = document.querySelector('#salary');
     const output = document.querySelector('.salary-output');
     output.textContent = salary.value;
     salary.addEventListener('input', function () {
         output.textContent = salary.value;
     });
-
+    let button = document.getElementById("submit-button"); 
+    name.addEventListener('input', function () {
+        if(name.value==""){
+            button.classList.remove("submit-button");
+    button.classList.add("submit-button-disabled");
+        } else{   button.classList.remove("submit-button-disabled");
+    button.classList.add("submit-button");
+    button.disabled = false;
+    }
+    });
 });
-
 const setErrorText = (errorName, errorMessage) => {
     const textError = document.querySelector(errorName);
     textError.textContent = errorMessage;
     return;
 }
-
 const save = () => {
     let employeePayrollData;
     try {
@@ -57,7 +62,16 @@ const save = () => {
 }
 
 const createEmployeePayroll = () => {
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    let max = 0;
+    if(employeePayrollList){
+        for(const empData of employeePayrollList){
+            if(max<empData._id)
+            max = empData._id;
+        }
+    }
     let employeePayrollData = new EmployeePayRollData();
+    employeePayrollData.id = parseInt(max) + 1;
     try {
         employeePayrollData.name = getInputValueById('#name');
     } catch (e) {
@@ -79,16 +93,13 @@ const createEmployeePayroll = () => {
         throw e;
     }
     console.log(employeePayrollData.toString());
-
     alert(employeePayrollData.toString());
     return employeePayrollData;
 }
-
 const getInputValueById = (id) => {
     let value = document.querySelector(id).value;
     return value;
 }
-
 const getSelectedValues = (propertyValue) => {
     let allItems = document.querySelectorAll(propertyValue);
     let selectedItems = [];
@@ -98,17 +109,15 @@ const getSelectedValues = (propertyValue) => {
     });
     return selectedItems;
 }
-
 function createAndUpdateStorage(employeePayrollData) {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-
     if (employeePayrollList != undefined) {
         employeePayrollList.push(employeePayrollData);
     }
     else {
         employeePayrollList = [employeePayrollData]
     }
-    alert(employeePayrollList.toString());
+    alert("Saved successfully!");
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
 const resetForm = () => {
