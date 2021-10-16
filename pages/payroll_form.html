@@ -1,144 +1,186 @@
-window.addEventListener('DOMContentLoaded', (event) => {
-    const name = document.querySelector('#name');
-    const nameTextError = document.querySelector('.name-text-error');
-    name.addEventListener('input', function () {
-        if (name.value.length == 0) {
-            setErrorText(".name-text-error", "");
-            return;
-        }
-        try {
-            (new EmployeePayRollData()).name = name.value;
-            setErrorText(".name-text-error", "");
-        } catch (e) {
-            setErrorText(".name-text-error", e);
-        }
-    });
-    const startDate = document.querySelector('.start-date');
-    startDate.addEventListener('input', function () {
-        let year = getInputValueById('#year');
-        let month = getInputValueById('#month');
-        let day = getInputValueById('#day');
-        if (day == "" || month == "" || year == "") {
-            setErrorText(".date-text-error", "");
-            return;
-        }
+<!DOCTYPE html>
+<html>
 
-        try {
-            (new EmployeePayRollData()).startDate = new Date(year, parseInt(month) - 1, day);
-            setErrorText(".date-text-error", "");
-        } catch (e) {
-            setErrorText(".date-text-error", e);
-        }
-    });
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,600;1,500&display=swap" rel="stylesheet">
 
-    const salary = document.querySelector('#salary');
-    const output = document.querySelector('.salary-output');
-    output.textContent = salary.value;
-    salary.addEventListener('input', function () {
-        output.textContent = salary.value;
-    });
+    <link rel="stylesheet" href="../css/payroll_form.css">
+    <script src="../js/payroll_form.js"></script>
+    <script src="../js/payroll_data.js"></script>
+    <title>Employee payroll form</title>
+</head>
 
-});
+<body>
+    <header class="header-content header">
+        <div class="logo-content">
+            <img src="../assets/images/logo.png">
+            <div>
+                <span class="emp-text">EMPLOYEE</span><br>
+                <span class="emp-text emp-payroll">PAYROLL</span>
+            </div>
+        </div>
+    </header>
+    <div class="form-content">
+        <form class="form" action="#" onsubmit="save();return false" onreset="resetForm()">
+            <div class="form-head">Employee Payroll form</div>
+            <div class="row-content">
+                <label class="label text" for="name">Name</label>
+                <input class="input" type="text" name="name" id="name" required
+                    autocomplete="off" autofocus>
+                <error-output class="name-text-error" for="text"></error-output>
+            </div>
+            <div class="row-content">
+                <label class="label text">Profile image</label>
+                <div class="profile-radio-content">
+                    <label class="container">
+                        <input type="radio" id="profile1" name="profile" value="../assets/profile-images/Ellipse -3.png"
+                            required>
+                            <span class="checkmark"></span>
+                        <img class="profile" id="image1" src="../assets/profile-images/Ellipse -3.png">
+                    </label>
+                    <label class="container">
+                        <input type="radio" id="profile2" name="profile" value="../assets/profile-images/Ellipse -1.png"
+                            required>
+                            <span class="checkmark"></span>
+                        <img class="profile" id="image2" src="../assets/profile-images/Ellipse -1.png">
+                    </label>
+                    <label class="container">
+                        <input type="radio" id="profile3" name="profile" value="../assets/profile-images/Ellipse -8.png"
+                            required>
+                            <span class="checkmark"></span>
+                        <img class="profile" id="image3" src="../assets/profile-images/Ellipse -8.png">
+                    </label>
+                    <label class="container">
+                        <input type="radio" id="profile4" name="profile" value="../assets/profile-images/Ellipse -7.png"
+                            required>
+                            <span class="checkmark"></span>
+                        <img class="profile" id="image4" src="../assets/profile-images/Ellipse -7.png">
+                    </label>
+                </div>
+            </div>
+            <div class="row-content">
+                <label class="label text" for="gender">Gender</label>
+                <div class="profile-radio-content">
+                    <label class="container">
+                        <input type="radio" name="gender" value="Male" required>
+                        <span class="checkmark"></span>
+                        <span class="text gender">Male</span>
+                    </label>
+                    <label class="container">
+                        <input type="radio" name="gender" value="Female">
+                        <span class="checkmark"></span>
+                        <span class="text gender">Female</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row-content">
+                <label class="label text" for="department">Department</label>
+                <div>
+                    <label class="text">
+                        <input class="checkbox" type="checkbox" name="department" id="hr" value="HR">
+                        HR</label>
+                    <label class="text">
+                        <input class="checkbox" type="checkbox" name="department" id="sales" value="Sales">
+                        Sales</label>
+                    <label class="text">
+                        <input class="checkbox" type="checkbox" name="department" id="finance" value="Finance">
+                        Finance</label>
+                    <label class="text">
+                        <input class="checkbox" type="checkbox" name="department" id="engineer" value="Engineer">
+                        Engineer</label>
+                    <label class="text">
+                        <input class="checkbox" type="checkbox" name="department" id="others" value="Others">
+                        Others</label>
+                </div>
+            </div>
+            <div class="row-content">
+                <label class="label text" for="salary">Salary </label>
+                <input class="input" type="range" name="salary" id="salary" min="300000" max="500000" step="100"
+                    value="400000">
+                <output class="salary-output text" for="salary">400000</output>
+            </div>
+            <div class="row-content">
+                <label class="label text" for="start-date">Start Date</label>
+                <div class="start-date">
+                    <select id="day" name="Day" required>
+                        <option value="" selected>Day</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+                    <select id="month" name="Month" required>
+                        <option value="" selected>Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select id="year" name="Year" required>
+                        <option value="" selected>Year</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                    <error-output class="date-text-error" for="text"></error-output>
 
-const setErrorText = (errorName, errorMessage) => {
-    const textError = document.querySelector(errorName);
-    textError.textContent = errorMessage;
-    return;
-}
+                </div>
+            </div>
+            <div class="row-content">
+                <label class="label text" for="notes">Notes</label>
+                <textarea class="input" id="notes" name="notes" style="height: 100px;"></textarea>
+            </div>
+            <div class="button-parent">
+                <a href="./payroll_home.html" class="reset-button button cancel-button">Cancel</a>
+                <span class="submit-reset">
+                    <button type="submit" class="button submit-button-disabled" id="submit-button" disabled>Submit</button>
+                    <button type="reset" class="reset-button button">Reset</button>
+                </span>
+            </div>
+        </form>
+    </div>
 
-const save = () => {
-    let employeePayrollData;
-    try {
-        employeePayrollData = createEmployeePayroll();
-        createAndUpdateStorage(employeePayrollData);
-    } catch (e) {
-        return;
-    }
-}
+</body>
 
-const createEmployeePayroll = () => {
-    let employeePayrollData = new EmployeePayRollData();
-    try {
-        employeePayrollData.name = getInputValueById('#name');
-    } catch (e) {
-        setErrorText(".name-text-error", " Please write valid name");
-        throw e;
-    }
-    employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop();
-    employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
-    employeePayrollData.department = getSelectedValues('[name=department]');
-    employeePayrollData.salary = getInputValueById('#salary');
-    employeePayrollData.note = getInputValueById('#notes');
-    let year = getInputValueById('#year');
-    let month = parseInt(getInputValueById('#month')) - 1;
-    let day = getInputValueById('#day');
-    try {
-        employeePayrollData.startDate = (new Date(year, month, day));
-    } catch (e) {
-        setErrorText(".date-text-error", "Please provide correct date");
-        throw e;
-    }
-    console.log(employeePayrollData.toString());
-
-    alert(employeePayrollData.toString());
-    return employeePayrollData;
-}
-
-const getInputValueById = (id) => {
-    let value = document.querySelector(id).value;
-    return value;
-}
-
-const getSelectedValues = (propertyValue) => {
-    let allItems = document.querySelectorAll(propertyValue);
-    let selectedItems = [];
-    allItems.forEach(item => {
-        if (item.checked)
-            selectedItems.push(item.value);
-    });
-    return selectedItems;
-}
-
-function createAndUpdateStorage(employeePayrollData) {
-    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-
-    if (employeePayrollList != undefined) {
-        employeePayrollList.push(employeePayrollData);
-    }
-    else {
-        employeePayrollList = [employeePayrollData]
-    }
-    alert(employeePayrollList.toString());
-    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
-}
-const resetForm = () => {
-    setValue('#name','');
-    unsetSelectedValues('[name=profile]');
-    unsetSelectedValues('[name=gender]');
-    unsetSelectedValues('[name=department]');
-    setValue('#salary','');
-    setValue('#notes','');
-    setValue('#day','1');
-    setValue('#month','January');
-    setValue('#year','2020');
-    setErrorText(".name-text-error", "");
-    setErrorText(".date-text-error", "");
-    setTextValue('.salary-output',"400000");
-  }
-  
-  const unsetSelectedValues = (propertyValue) => {
-    let allItems = document.querySelectorAll(propertyValue);
-    allItems.forEach(item => {
-      item.checked = false;
-    });
-  }
-  
-  const setTextValue = (query, value) =>{
-    const element = document.querySelector(query);
-    element.textContent = value;
-  }
-  
-  const setValue = (query, value) => {
-    const element = document.querySelector(query);
-    element.value = value;
-  }
+</html>
