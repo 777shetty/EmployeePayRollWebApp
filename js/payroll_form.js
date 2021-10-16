@@ -38,6 +38,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
         output.textContent = salary.value;
     });
 
+    let button = document.getElementById("submit-button"); 
+    name.addEventListener('input', function () {
+        if(name.value==""){
+            button.classList.remove("submit-button");
+    button.classList.add("submit-button-disabled");
+        } else{   button.classList.remove("submit-button-disabled");
+    button.classList.add("submit-button");
+    button.disabled = false;
+    }
+    });
 });
 
 const setErrorText = (errorName, errorMessage) => {
@@ -57,7 +67,16 @@ const save = () => {
 }
 
 const createEmployeePayroll = () => {
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    let max = 0;
+    if(employeePayrollList){
+        for(const empData of employeePayrollList){
+            if(max<empData._id)
+            max = empData._id;
+        }
+    }
     let employeePayrollData = new EmployeePayRollData();
+    employeePayrollData.id = parseInt(max) + 1;
     try {
         employeePayrollData.name = getInputValueById('#name');
     } catch (e) {
@@ -108,7 +127,7 @@ function createAndUpdateStorage(employeePayrollData) {
     else {
         employeePayrollList = [employeePayrollData]
     }
-    alert(employeePayrollList.toString());
+    alert("Saved successfully!");
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
 const resetForm = () => {
