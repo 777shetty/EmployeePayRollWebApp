@@ -76,7 +76,7 @@ const save = (event) => {
         resetForm();
         window.location.replace(site_properties.home_page);
         }else {
-            createOrUpdateEmployeePayroll();
+            createEmployeePayroll();
         }
     }catch(e){
         console.log(e);
@@ -152,13 +152,9 @@ const createNewEmployeeId = () => {
     localStorage.setItem("EmployeeID", empID);
     return empID;
 }
-const createOrUpdateEmployeePayroll = () => {
+const createEmployeePayroll = () => {
     let postURL = site_properties.server_url;
     let methodCall = "POST";
-    if(isUpdate){
-        methodCall = "PUT";
-        postURL = postURL + employeePayrollObj.id.toString();
-    }
     makeServiceCall(methodCall, postURL, true, employeePayrollObj)
         .then(data => {
             resetForm();
